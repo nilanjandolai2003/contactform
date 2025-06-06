@@ -1,16 +1,14 @@
 FROM php:8.1-apache
 
-# Enable mod_rewrite (if needed)
+# Enable required Apache modules
+RUN docker-php-ext-install mysqli
 RUN a2enmod rewrite
 
-# Copy everything into the container
+# Copy all files into the container
 COPY . /var/www/html/
 
-# Change DocumentRoot to 'public'
-RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
+# Set working directory
+WORKDIR /var/www/html/
 
-# Set working dir
-WORKDIR /var/www/html
-
-# Permissions (optional)
+# Set proper permissions
 RUN chown -R www-data:www-data /var/www/html
